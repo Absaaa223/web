@@ -1,0 +1,21 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST Weather",
+	"Description": "Dynamic time of day, physically-plausible astronomy, a weather state machine with regional bias, and the global wind field that drives dune migration, flora, particles and audio.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "DustWeather",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{ "Name": "DustCore", "Enabled": true },
+		{ "Name": "DustWorld", "Enabled": true }
+	]
+}
