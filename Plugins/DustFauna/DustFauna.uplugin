@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST Fauna",
+	"Description": "Utility-AI creatures with modelled needs, daily routines, territory, migration and a population simulation that persists beyond the player's view.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "DustFauna",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{ "Name": "DustCore", "Enabled": true },
+		{ "Name": "DustWorld", "Enabled": true },
+		{ "Name": "DustWeather", "Enabled": true }
+	]
+}
