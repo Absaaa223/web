@@ -1,0 +1,28 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST World",
+	"Description": "Deterministic world sampling, region composition, dune simulation, cave fields, point-of-interest generation and streaming direction.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "DustWorld",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "DustWorldEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "DustCore",
+			"Enabled": true
+		}
+	]
+}
