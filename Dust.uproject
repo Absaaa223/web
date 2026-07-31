@@ -1,0 +1,78 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.5",
+	"Category": "Game",
+	"Description": "DUST // Beyond the Horizon - an open desert exploration experience.",
+	"Modules": [
+		{
+			"Name": "Dust",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject",
+				"EnhancedInput",
+				"UMG"
+			]
+		},
+		{
+			"Name": "DustEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"UnrealEd"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "DustCore",
+			"Enabled": true
+		},
+		{
+			"Name": "DustWorld",
+			"Enabled": true
+		},
+		{
+			"Name": "DustWeather",
+			"Enabled": true
+		},
+		{
+			"Name": "DustFauna",
+			"Enabled": true
+		},
+		{
+			"Name": "DustNarrative",
+			"Enabled": true
+		},
+		{
+			"Name": "DustAudio",
+			"Enabled": true
+		},
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		},
+		{
+			"Name": "SunPosition",
+			"Enabled": true
+		},
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"Linux",
+		"Mac"
+	]
+}

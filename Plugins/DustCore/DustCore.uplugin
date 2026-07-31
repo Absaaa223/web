@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST Core",
+	"Description": "Shared foundation for DUST: deterministic math, logging, developer settings, save system, gameplay tags, performance governor and developer tooling.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "DustCore",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault"
+		},
+		{
+			"Name": "DustCoreEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}

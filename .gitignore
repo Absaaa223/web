@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------------
+# DUST // Beyond the Horizon - repository ignore rules
+# ---------------------------------------------------------------------------
+
+# Unreal generated directories
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+Platforms/*/Binaries/
+Platforms/*/Build/
+Platforms/*/Intermediate/
+
+# Generated project files
+*.sln
+*.suo
+*.xcodeproj/
+*.xcworkspace/
+.vs/
+.vscode/
+.idea/
+*.VC.db
+*.VC.opendb
+*.sdf
+*.opensdf
+
+# Compiled artefacts
+*.obj
+*.pdb
+*.dll
+*.lib
+*.so
+*.dylib
+*.exe
+*.app/
+
+# Packaged builds and captures
+Packaged/
+Dist/
+Saved/Screenshots/
+Saved/PhotoGallery/
+
+# Local developer overrides (per-machine, never committed)
+Config/*Local*.ini
+Config/LocalOverrides/
+*.local.ini
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large source art lives in the art depot, not in git
+RawContent/**/*.zbrush
+RawContent/**/*.blend1
+RawContent/**/*.exr
+RawContent/**/*.psd
+
+# Tooling scratch
+Tools/**/__pycache__/
+Tools/**/*.pyc
+Tools/.venv/
