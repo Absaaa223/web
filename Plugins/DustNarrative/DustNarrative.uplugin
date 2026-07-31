@@ -1,0 +1,21 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST Narrative",
+	"Description": "Discovery registry, the curiosity director that guarantees the horizon is always worth walking toward, environmental storytelling and the player's journal.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "DustNarrative",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{ "Name": "DustCore", "Enabled": true },
+		{ "Name": "DustWorld", "Enabled": true }
+	]
+}

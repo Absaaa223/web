@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "DUST Audio",
+	"Description": "Adaptive music built around a silence budget, a wind bed driven by the real wind field, surface-aware footsteps and terrain-derived reverb.",
+	"Category": "DUST",
+	"CreatedBy": "DUST // Beyond the Horizon",
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "DustAudio",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{ "Name": "DustCore", "Enabled": true },
+		{ "Name": "DustWorld", "Enabled": true },
+		{ "Name": "DustWeather", "Enabled": true },
+		{ "Name": "DustNarrative", "Enabled": true }
+	]
+}
