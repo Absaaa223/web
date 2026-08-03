@@ -70,19 +70,33 @@ See [`Docs/TECH_DESIGN.md`](Docs/TECH_DESIGN.md) for the full system breakdown.
 ## Getting started
 
 ```bash
-# Generate project files (Windows)
-Tools\GenerateProjectFiles.bat
+export UE_ROOT=/path/to/UnrealEngine   # 5.5
 
-# Generate project files (Linux/Mac)
+# Generate IDE project files for the seven modules
 ./Tools/GenerateProjectFiles.sh
 
-# One-time: create the Enhanced Input assets, material parameter collections
-# and default data assets the C++ modules expect.
-Tools/RunCommandlet.sh DustBootstrap
+# One-time: create the world composition, twelve regions, weather presets,
+# the bestiary and the material parameter collections that the C++ modules
+# expect. A fresh clone boots into a flat plane until this has run.
+./Tools/RunCommandlet.sh DustBootstrap
+
+# Confirm the world satisfies its design rules
+./Tools/ValidateWorld.sh
 ```
 
 Then open `Dust.uproject`, load `/Game/Dust/Maps/L_Dust_Persistent`, and press Play.
-Console command `dust.debug.world 1` overlays the live sampler readout.
+
+Useful console commands:
+
+| | |
+|---|---|
+| `dust.debug.world 1` | Live sampler readout, cache hit rate, dune migration phase |
+| `dust.debug.curiosity 1` | Candidate list, curiosity score, dead-zone timer |
+| `dust.debug.ecology 1` | Creatures tracked vs promoted, regions populated |
+| `dust.debug.traversal 1` | Draws the traversal probes, logs state transitions |
+| `dust.debug.audio 1` | Audio state, music density against the silence budget |
+| `dust.weather.DuneMigrationScale 200` | Makes dune migration visible in seconds |
+| `dust.sky.ForceHour 18.5` | Pins the clock for lighting work |
 
 ## Requirements
 
@@ -104,8 +118,22 @@ Console command `dust.debug.world 1` overlays the live sampler readout.
 | [`Docs/AUDIO_DESIGN.md`](Docs/AUDIO_DESIGN.md) | Adaptive music, silence budget, spatial model |
 | [`Docs/NARRATIVE.md`](Docs/NARRATIVE.md) | The Vessel Age, environmental storytelling rules, the open ending |
 | [`Docs/PERFORMANCE.md`](Docs/PERFORMANCE.md) | Frame budgets per platform, governor behaviour, profiling workflow |
+| [`Docs/CONTENT_STRUCTURE.md`](Docs/CONTENT_STRUCTURE.md) | `/Game/Dust/` layout, naming, and what the bootstrap generates |
 | [`Docs/ROADMAP.md`](Docs/ROADMAP.md) | Production phases from this foundation to ship |
 | [`Docs/CODING_STANDARDS.md`](Docs/CODING_STANDARDS.md) | C++ conventions enforced in review |
+
+## What is and is not here
+
+**Here:** every runtime system, in C++, documented — deterministic world
+sampling, migrating dunes, cave fields, POI generation with placement rules,
+persistent sand deformation, astronomy, weather, utility-AI fauna with a
+persistent ecology, the curiosity director, the audio silence budget, traversal,
+survival, camera, HUD, photo mode, save, performance governor, and the offline
+bake/validate/census tooling.
+
+**Not here:** any binary content. No meshes, textures, materials, audio,
+animation or levels. The systems are complete; the game is not. See
+[`Docs/ROADMAP.md`](Docs/ROADMAP.md) for what turns one into the other.
 
 ## Licence
 
