@@ -136,6 +136,41 @@ textarea{resize:vertical}
 #toast{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(var(--tabs) + env(safe-area-inset-bottom,0px) + 80px);background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:99px;font-weight:600;font-size:14px;max-width:calc(100% - 32px);text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3)}
 @media (prefers-reduced-motion:no-preference){.panel{animation:sube .22s ease-out}@keyframes sube{from{transform:translateY(40px);opacity:.6}}}
+
+/* --- banda de color, tarjetas de saldo, iconos redondos de colores --- */
+:root{--hero:#B3195F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#5A1436}}
+:root[data-theme="dark"]{--hero:#5A1436}
+body::before{background:var(--hero)}
+.top{background:var(--hero);color:#fff}
+.top .estado,.top .estado.nube{background:rgba(255,255,255,.2);color:#fff}
+.top .estado.local{background:#fff;color:#8A5200}
+.hero{background:var(--hero);margin:-4px calc(-1*var(--gr)) 0 calc(-1*var(--gl));padding:6px 0 20px;border-radius:0 0 26px 26px}
+.carr{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-left:var(--gl);padding-right:var(--gr);scrollbar-width:none}
+.carr::-webkit-scrollbar{display:none}
+.saldo{flex:0 0 88%;scroll-snap-align:center;background:var(--surface);color:var(--ink);border-radius:18px;padding:16px 18px;min-width:0;
+  display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.saldo small{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.saldo b{grid-column:1/-1;font-family:var(--display);font-size:36px;font-weight:700;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.puntos{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.puntos i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45)}
+.puntos i.on{background:#fff}
+.rapidas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rapidas button,.rapidas a{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;text-align:center;min-width:0}
+.ic{width:46px;height:46px;border-radius:50%;background:var(--c,var(--accent));color:#fff;display:grid;place-items:center;flex:none;
+  font-family:var(--display);font-weight:700;font-size:19px;position:relative;overflow:hidden}
+.ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rapidas .ic{width:56px;height:56px}
+.rapidas .ic svg{width:26px;height:26px}
+.ph{background:color-mix(in srgb,var(--c,var(--muted)) 20%,var(--surface))}
+.ph span{color:var(--c,var(--muted));opacity:.85}
+.dia{display:flex;justify-content:space-between;align-items:center;padding:12px 12px 4px;font-family:var(--display);font-weight:700;font-size:16px;border-top:1px solid var(--line)}
+.dia:first-child,.dia+.fila{border-top:0}
+.der.pos{color:var(--ok)}
+.tabs .plus{flex:none;width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--accent-ink);align-self:center;margin:0 4px;
+  display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.28);transform:translateY(-12px)}
+.tabs .plus svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
 </style>
 
 <div class="top"><h1 id="marca">Perchero</h1><span id="estado" class="estado">Conectando…</span></div>
@@ -143,7 +178,7 @@ textarea{resize:vertical}
 <nav class="tabs" id="tabs">
   <a href="#inicio" data-t="inicio"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>Inicio</a>
   <a href="#inventario" data-t="inventario"><svg viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 1 2-2M12 8v2l9 6a1 1 0 0 1-.6 1.8H3.600a1 1 0 0 1-.6-1.8l9-6"/></svg>Inventario</a>
-  <a href="#vender" data-t="vender"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5zM9 10V6a3 3 0 0 1 6 0v4"/></svg>Vender</a>
+  <button class="plus" data-act="menu" aria-label="Vender o añadir"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
   <a href="#catalogos" data-t="catalogos"><svg viewBox="0 0 24 24"><path d="M4 5h7v14H4zM13 5h7v14h-7zM7 9h1M16 9h1"/></svg>Catálogos</a>
   <a href="#mas" data-t="mas"><svg viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg>Más</a>
 </nav>
@@ -173,13 +208,24 @@ const seVende=p=>p.venta!==false;
 const prod=id=>S.productos.find(p=>p.id===id);
 const mini=p=>p.mini?'/_blob/'+p.mini:(p.miniData||'');
 const grande=p=>p.foto?'/_blob/'+p.foto:mini(p);
-function ph(p,cls){const s=mini(p);return `<div class="ph ${cls||''}"><span>${esc((p.nombre||'?').trim().charAt(0).toUpperCase())}</span>${s?`<img loading="lazy" alt="" src="${esc(s)}">`:''}</div>`}
+const PALETA=['#F2994A','#EB5757','#E84393','#27AE60','#2D9CDB','#D9A404','#16A39A','#8E5BD9'];
+function color(t){let h=0;t=String(t||'');for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))>>>0;return PALETA[h%PALETA.length]}
+const ICO={bolsa:'<svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5zM9 10V6a3 3 0 0 1 6 0v4"/></svg>',
+  gancho:'<svg viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 1 2-2M12 8v2l9 6a1 1 0 0 1-.6 1.8H3.6a1 1 0 0 1-.6-1.8l9-6"/></svg>',
+  libro:'<svg viewBox="0 0 24 24"><path d="M4 5h7v14H4zM13 5h7v14h-7zM7 9h1M16 9h1"/></svg>',
+  barra:'<svg viewBox="0 0 24 24"><path d="M4 6h16M7 6v4M12 6v7M17 6v4M6 20l1-6M18 20l-1-6"/></svg>'};
+const PAGO={Efectivo:'#27AE60',Transferencia:'#2D9CDB',Tarjeta:'#8E5BD9',Fiado:'#F2994A'};
+function ph(p,cls){const s=mini(p),l=esc((p.nombre||'?').trim().charAt(0).toUpperCase()),c=color(p.cat||p.nombre),im=s?`<img loading="lazy" alt="" src="${esc(s)}">`:'';
+  return cls==='mini'?`<div class="ic" style="--c:${c}">${l}${im}</div>`:`<div class="ph" style="--c:${c}"><span>${l}</span>${im}</div>`}
+function diaTxt(iso){const d=new Date(iso).toDateString();return d===new Date().toDateString()?'Hoy':d===new Date(Date.now()-864e5).toDateString()?'Ayer':new Date(iso).toLocaleDateString('es',{day:'numeric',month:'long'})}
+function porDia(l){const g=[];l.forEach(v=>{const k=new Date(v.fecha).toDateString();let x=g[g.length-1];if(!x||x.k!==k)g.push(x={k,f:v.fecha,vs:[]});x.vs.push(v)});
+  return `<div class="lista">${g.map(x=>`<div class="dia"><span>${diaTxt(x.f)}</span><span class="pill num">${din(x.vs.filter(v=>!v.anulada).reduce((s,v)=>s+v.total,0))}</span></div>${x.vs.map(filaVenta).join('')}`).join('')}</div>`}
 function fecha(iso){const d=new Date(iso);return d.toLocaleDateString('es',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}
 function cats(){const s=new Set(S.cfg.cats||[]);S.productos.forEach(p=>p.cat&&s.add(p.cat));return [...s]}
 let tT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tT);tT=setTimeout(()=>t.hidden=true,2600)}
 function falla(e){console.error(e);const c=e&&e.code;
   toast(c==='invalid_argument'?'No tienes permiso para cambiar esto':c==='quota_exceeded'?'Se llenó el espacio. Borra algo que ya no uses':'No se pudo guardar. Revisa tu conexión e inténtalo otra vez')}
-document.addEventListener('error',e=>{if(e.target&&e.target.tagName==='IMG'&&e.target.closest('.ph,.foto'))e.target.remove()},true);
+document.addEventListener('error',e=>{if(e.target&&e.target.tagName==='IMG'&&e.target.closest('.ph,.foto,.ic'))e.target.remove()},true);
 
 /* ---------- datos ---------- */
 const local={leer(c){try{return JSON.parse(localStorage.getItem('perchero:'+c))||null}catch(e){return null}},
@@ -256,8 +302,8 @@ function estadoPill(p){const t=total(p);
 function tarjeta(p){return `<button class="card" data-act="editarProd" data-id="${esc(p.id)}">${p.ejemplo?'<i class="cinta">Ejemplo</i>':''}${ph(p)}
   <div class="inf"><b>${esc(p.nombre)}</b><div class="pie">${seVende(p)?`<span class="tag num">${din(p.precio)}</span>`:'<span class="pill">Equipo</span>'}${estadoPill(p)}</div></div></button>`}
 function filaVenta(v){const n=v.items.reduce((s,i)=>s+i.cant,0);
-  return `<button class="fila" data-act="verVenta" data-id="${esc(v.id)}"><div class="tx"><b>${esc(v.items.map(i=>i.nombre).join(', '))}</b>
-  <small>${fecha(v.fecha)} · ${n} ${n===1?'pieza':'piezas'}${v.cliente?' · '+esc(v.cliente):''}${v.anulada?' · Anulada':''}</small></div><span class="der num ${v.anulada?'tachado':''}">${din(v.total)}</span></button>`}
+  return `<button class="fila" data-act="verVenta" data-id="${esc(v.id)}"><div class="ic" style="--c:${v.anulada?'#9A93A3':PAGO[v.pago]||'#E84393'}">${ICO.bolsa}</div><div class="tx"><b>${esc(v.items.map(i=>i.nombre).join(', '))}</b>
+  <small>${new Date(v.fecha).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})} · ${n} ${n===1?'pieza':'piezas'}${v.pago?' · '+esc(v.pago):''}${v.cliente?' · '+esc(v.cliente):''}${v.anulada?' · Anulada':''}</small></div><span class="der num ${v.anulada?'tachado':'pos'}">${v.anulada?'':'+'}${din(v.total)}</span></button>`}
 const cargando='<div class="vacio">Cargando tu inventario…</div>';
 
 const VISTAS={
@@ -271,19 +317,28 @@ inicio:{shell:()=>'<div id="ini" style="display:flex;flex-direction:column;gap:1
   let h='';
   if(S.modo==='local')h+='<div class="aviso warn"><span>Ahora mismo se guarda solo en este dispositivo. Abre Perchero con tu cuenta de Claude para que se sincronice con tus otros dispositivos.</span></div>';
   if(ej)h+=`<div class="aviso"><span>Puse ${ej} ${ej===1?'ejemplo':'ejemplos'} para que veas cómo funciona. Bórralos cuando empieces a cargar lo tuyo.</span><button class="btn chico" data-act="borrarEjemplos">Borrar ejemplos</button></div>`;
-  h+=`<div class="tiles"><div class="tile"><small>Piezas para vender</small><b class="num">${piezas}</b></div>
-   <div class="tile"><small>Valor del inventario</small><b class="num">${din(valor)}</b></div>
-   <div class="tile"><small>Vendido hoy</small><b class="num">${din(vHoy)}</b></div>
-   <div class="tile"><small>Vendido este mes</small><b class="num">${din(vMes)}</b></div></div>
-   <div class="acciones"><button class="btn" data-act="nuevoProd">＋ Añadir prenda</button><a class="btn sec2" href="#vender" style="text-decoration:none">Registrar venta</a></div>`;
+  const nHoy=ok.filter(v=>new Date(v.fecha).toDateString()===hoy).length;
+  const hero=`<div class="hero"><div class="carr" id="carr">
+    <div class="saldo"><small>Vendido hoy</small><span class="pill ok num">${nHoy} ${nHoy===1?'venta':'ventas'}</span><b class="num">${din(vHoy)}</b></div>
+    <div class="saldo"><small>Vendido este mes</small><span class="pill num">${new Date().toLocaleDateString('es',{month:'long'})}</span><b class="num">${din(vMes)}</b></div>
+    <div class="saldo"><small>Valor del inventario</small><span class="pill num">${piezas} ${piezas===1?'pieza':'piezas'}</span><b class="num">${din(valor)}</b></div>
+   </div><div class="puntos" id="puntos"><i class="on"></i><i></i><i></i></div></div>`;
+  h+=`<div class="rapidas"><a href="#vender"><span class="ic" style="--c:#27AE60">${ICO.bolsa}</span>Vender</a>
+   <button data-act="nuevoProd"><span class="ic" style="--c:#E84393">${ICO.gancho}</span>Añadir prenda</button>
+   <button data-act="nuevoCat"><span class="ic" style="--c:#2D9CDB">${ICO.libro}</span>Catálogo</button>
+   <button data-act="nuevoPer"><span class="ic" style="--c:#F2994A">${ICO.barra}</span>Perchero</button></div>`;
   if(bajos.length)h+=`<div class="sec"><h2>Por reponer</h2><a href="#inventario">Ver inventario</a></div><div class="lista">${bajos.slice(0,6).map(p=>
     `<button class="fila" data-act="editarProd" data-id="${esc(p.id)}">${ph(p,'mini')}<div class="tx"><b>${esc(p.nombre)}</b><small>${esc(p.cat||'Sin categoría')}</small></div>${estadoPill(p)}</button>`).join('')}</div>`;
   h+=`<div class="sec"><h2>Últimas ventas</h2>${S.ventas.length?'<a href="#mas">Ver todas</a>':''}</div>`;
-  h+=S.ventas.length?`<div class="lista">${S.ventas.slice(0,5).map(filaVenta).join('')}</div>`:'<div class="vacio"><b>Aún no hay ventas</b>Cuando registres una venta aparece aquí y se descuenta sola del inventario.</div>';
-  $('#ini').innerHTML=h}},
+  h+=S.ventas.length?porDia(S.ventas.slice(0,8)):'<div class="vacio"><b>Aún no hay ventas</b>Cuando registres una venta aparece aquí y se descuenta sola del inventario.</div>';
+  const pos=$('#carr')?$('#carr').scrollLeft:0;
+  $('#ini').innerHTML=hero+h;
+  const ca=$('#carr');ca.scrollLeft=pos;
+  const pt=()=>{const i=Math.round(ca.scrollLeft/(ca.scrollWidth/3));document.querySelectorAll('#puntos i').forEach((d,k)=>d.classList.toggle('on',k===i))};
+  ca.onscroll=pt;pt()}},
 
 inventario:{shell:()=>`<input class="buscar" id="q" type="search" placeholder="Buscar por nombre o categoría" value="${esc(S.ui.q)}" autocomplete="off">
-  <div class="chips" id="chips"></div><div id="grid"></div><button class="fab" data-act="nuevoProd">＋ Añadir</button>`,fill(){
+  <div class="chips" id="chips"></div><div id="grid"></div>`,fill(){
   if(!S.listo){$('#grid').innerHTML=cargando;return}
   const c=S.ui.cat;
   $('#chips').innerHTML=[['','Todo']].concat(cats().filter(x=>S.productos.some(p=>p.cat===x)).map(x=>[x,x]),[['__eq','Equipo'],['__ag','Agotados']])
@@ -292,7 +347,7 @@ inventario:{shell:()=>`<input class="buscar" id="q" type="search" placeholder="B
   const l=S.productos.filter(p=>(!q||(p.nombre+' '+(p.cat||'')).toLowerCase().includes(q))&&
     (!c||(c==='__eq'?!seVende(p):c==='__ag'?total(p)<=0:p.cat===c)));
   $('#grid').innerHTML=l.length?`<div class="grid">${l.map(tarjeta).join('')}</div>`:
-    (S.productos.length?'<div class="vacio">Nada coincide con esa búsqueda.</div>':'<div class="vacio"><b>Tu inventario está vacío</b>Toca «＋ Añadir» para cargar tu primera prenda con foto, tallas y precio.</div>')}},
+    (S.productos.length?'<div class="vacio">Nada coincide con esa búsqueda.</div>':'<div class="vacio"><b>Tu inventario está vacío</b>Toca el botón ＋ de abajo para cargar tu primera prenda con foto, tallas y precio.</div>')}},
 
 vender:{shell:()=>`<input class="buscar" id="vq" type="search" placeholder="Buscar prenda para vender" value="${esc(S.ui.vq)}" autocomplete="off"><div id="vl"></div><div id="cb"></div>`,fill(){
   if(!S.listo){$('#vl').innerHTML=cargando;return}
@@ -317,7 +372,7 @@ mas:{shell:()=>'<div id="ms" style="display:flex;flex-direction:column;gap:16px"
   h+=S.percheros.length?`<div class="lista">${S.percheros.map(r=>{const ps=S.productos.filter(p=>p.perchero===r.id),n=ps.reduce((s,p)=>s+total(p),0);
     return `<button class="fila" data-act="editarPer" data-id="${esc(r.id)}"><div class="tx"><b>${esc(r.nombre)}${r.ejemplo?' (ejemplo)':''}</b><small>${ps.length} ${ps.length===1?'prenda distinta':'prendas distintas'}${r.notas?' · '+esc(r.notas):''}</small></div><span class="pill num">${n} uds</span></button>`}).join('')}</div>`
     :'<div class="vacio">Añade tus percheros, estantes o cajas para saber dónde está cada prenda.</div>';
-  h+=`<div class="sec"><h2>Historial de ventas</h2></div>`+(S.ventas.length?`<div class="lista">${S.ventas.slice(0,60).map(filaVenta).join('')}</div>`:'<div class="vacio">Todavía no hay ventas registradas.</div>');
+  h+=`<div class="sec"><h2>Historial de ventas</h2></div>`+(S.ventas.length?porDia(S.ventas.slice(0,60)):'<div class="vacio">Todavía no hay ventas registradas.</div>');
   h+=`<div class="sec"><h2>Mi negocio</h2></div><div id="ajustes" style="display:flex;flex-direction:column;gap:12px">
    <label class="c">Nombre del negocio<input id="a-nombre" value="${esc(S.cfg.nombre)}" placeholder="Así sale en tus catálogos"></label>
    <div class="dos"><label class="c" style="flex:0 0 96px">Moneda<input id="a-moneda" value="${esc(S.cfg.moneda)}" maxlength="4"></label>
@@ -523,6 +578,9 @@ function exportar(){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',f
 /* ---------- acciones ---------- */
 const A={
   cerrar,
+  menu(){const f=(a,c,i,t,s)=>`<button class="fila" data-act="${a}"><span class="ic" style="--c:${c}">${i}</span><div class="tx"><b>${t}</b><small>${s}</small></div></button>`;
+    hoja('¿Qué quieres hacer?',`<div class="lista">${f('irVender','#27AE60',ICO.bolsa,'Registrar una venta','Se descuenta sola del inventario')}${f('nuevoProd','#E84393',ICO.gancho,'Añadir una prenda','Con foto, tallas y precio')}${f('nuevoCat','#2D9CDB',ICO.libro,'Crear un catálogo','Para compartir por WhatsApp o redes')}${f('nuevoPer','#F2994A',ICO.barra,'Añadir un perchero o lugar','Para saber dónde está cada cosa')}</div>`)},
+  irVender(){cerrar();location.hash='vender'},
   nuevoProd(){formProd(null)},
   editarProd(b){const p=prod(b.dataset.id);p&&formProd(p)},
   filtro(b){S.ui.cat=b.dataset.k;pintar()},
