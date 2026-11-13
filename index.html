@@ -122,10 +122,13 @@ label.c input,label.c select,label.c textarea,.in{min-height:46px;border-radius:
   font-weight:400;font-size:16px;letter-spacing:0;text-transform:none;width:100%;min-width:0}
 label.c input:focus,label.c select:focus,label.c textarea:focus,.in:focus{border-color:var(--ink);outline:0}
 textarea{resize:vertical}
+.cuerpo>*{flex-shrink:0}
 .dos{display:flex;gap:10px}
 .foto{position:relative;border-radius:4px;background:var(--soft);aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;width:100%;color:var(--muted);font-size:14px;font-weight:500;border:1px dashed #BDBDBD}
 .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--soft)}
-.foto em{position:absolute;right:10px;bottom:10px;font-style:normal;font-size:12px;font-weight:600;background:var(--ink);color:#fff;padding:5px 10px}
+.foto .fin{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+.foto .sf{font-size:14px;color:var(--muted)}
+.foto>b{position:absolute;right:10px;bottom:10px;font-size:12px;font-weight:600;background:var(--ink);color:#fff;padding:5px 10px}
 .paso{display:flex;align-items:center;gap:6px;flex:none}
 .paso button{width:40px;height:40px;border-radius:4px;border:1px solid #CFCFCF;font-size:18px;font-weight:500}
 .paso input{width:52px;min-height:40px;text-align:center;border-radius:4px;border:1px solid #CFCFCF;background:var(--bg);font-size:16px;font-weight:700;padding:0}
@@ -155,7 +158,6 @@ textarea{resize:vertical}
 </nav>
 <div id="sheet" hidden></div>
 <div id="toast" hidden></div>
-<input type="file" id="archivo" accept="image/*" hidden>
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -347,11 +349,12 @@ const paso=(id,v,extra)=>`<div class="paso"><button type="button" data-act="meno
 
 /* --- prenda --- */
 let F=null,FILE=null;
+function fotoCampo(o){const g=o&&grande(o);return `<label class="foto" id="f-foto"><i id="f-prev">${g?`<img alt="" src="${esc(g)}">`:''}</i><span class="sf">${CAM}<em>Toca aquí para tomar o elegir una foto</em></span><b id="f-em" ${g?'':'hidden'}>Cambiar foto</b><input class="fin" type="file" accept="image/*" aria-label="Foto"></label>`}
 function formProd(p){
   F={id:p?p.id:null,orig:p||null,vars:p&&p.vars?clon(p.vars):[],file:null,quitar:false};FILE=null;
   const d=p||{venta:true};
   hoja(p?'Editar prenda':'Nueva prenda',`
-   <button type="button" class="foto" data-act="elegirFoto" id="f-foto">${p&&grande(p)?`<img alt="" src="${esc(grande(p))}">`:''}<span>Toca para tomar o elegir una foto</span>${p&&grande(p)?'<em>Cambiar foto</em>':''}</button>
+   ${fotoCampo(p)}
    <label class="c">Nombre<input id="f-nombre" value="${esc(d.nombre||'')}" placeholder="Ej. Blusa de lino blanca" autocomplete="off"></label>
    <label class="c">Categoría<input id="f-cat" value="${esc(d.cat||'')}" placeholder="Escribe o elige una" autocomplete="off"></label>
    <div class="chips">${cats().map(c=>`<button type="button" class="chip" data-act="ponCat" data-k="${esc(c)}">${esc(c)}</button>`).join('')}</div>
@@ -387,7 +390,7 @@ async function guardarProd(b){
 /* --- perchero --- */
 function formPer(r){FILE=null;
   const ps=r?S.productos.filter(p=>p.perchero===r.id):[];
-  hoja(r?'Editar lugar':'Nuevo perchero o lugar',`<button type="button" class="foto" data-act="elegirFoto" id="f-foto">${r&&grande(r)?`<img alt="" src="${esc(grande(r))}">`:''}<span>Toca para tomar o elegir una foto</span>${r&&grande(r)?'<em>Cambiar foto</em>':''}</button>
+  hoja(r?'Editar lugar':'Nuevo perchero o lugar',`${fotoCampo(r)}
    <label class="c">Nombre<input id="r-nombre" value="${esc(r?r.nombre:'')}" placeholder="Ej. Perchero 1, Estante de zapatos, Caja bodega" autocomplete="off"></label>
    <label class="c">Notas<input id="r-notas" value="${esc(r?r.notas||'':'')}" placeholder="Opcional" autocomplete="off"></label>
    ${ps.length?`<div class="sec"><b>Lo que hay aquí</b></div><div class="lista">${ps.map(p=>`<div class="fila">${ph(p,'mini')}<div class="tx"><b>${esc(p.nombre)}</b><small>${esc(p.cat||'')}</small></div>${estadoPill(p)}</div>`).join('')}</div>`:''}`,
@@ -537,7 +540,6 @@ const A={
   nuevoProd(){formProd(null)},
   editarProd(b){const p=prod(b.dataset.id);p&&formProd(p)},
   filtro(b){S.ui.cat=b.dataset.k;pintar()},
-  elegirFoto(){$('#archivo').value='';$('#archivo').click()},
   ponCat(b){$('#f-cat').value=b.dataset.k},
   masVar(b){leerVars();if(!F.vars.length&&ent($('#f-vars').dataset.cant)&&b.dataset.k){F.vars.push({n:b.dataset.k,c:ent($('#f-vars').dataset.cant)})}else F.vars.push({n:b.dataset.k,c:1});pintarVars();if(!b.dataset.k){const i=document.querySelectorAll('#f-vars .var .in');i[i.length-1].focus()}},
   quitaVar(b){leerVars();F.vars.splice(+b.dataset.i,1);pintarVars()},
@@ -585,7 +587,7 @@ document.addEventListener('input',e=>{const t=e.target;
   if(t.id==='q'){S.ui.q=t.value;pintar()}else if(t.id==='vq'){S.ui.vq=t.value;pintar()}
   else if(t.dataset.pick){t.checked?C.sel.add(t.dataset.pick):C.sel.delete(t.dataset.pick)}});
 document.addEventListener('change',e=>{const t=e.target;
-  if(t.id==='archivo'&&t.files[0]&&$('#f-foto')){FILE=t.files[0];const u=URL.createObjectURL(FILE);$('#f-foto').innerHTML=`<img alt="" src="${u}"><em>Cambiar foto</em>`}
+  if(t.classList.contains('fin')&&t.files[0]){FILE=t.files[0];$('#f-prev').innerHTML=`<img alt="" src="${URL.createObjectURL(FILE)}">`;$('#f-em').hidden=false}
   else if(t.closest('#f-vars')){leerVars();const pl=$('#f-vars .sec .pill');if(pl)pl.textContent=F.vars.reduce((s,v)=>s+(v.c||0),0)+' en total'}
   else if(t.matches('[data-cn],[data-cp]')){leerCarrito();carrito();pintar()}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)cerrar()});
